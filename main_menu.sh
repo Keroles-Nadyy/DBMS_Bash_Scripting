@@ -27,6 +27,7 @@ main_menu() {
                 ;;
             "List databases")
                 echo list_databases
+                list_databases
                 ;;
             "Drop database")
                 echo drop_database

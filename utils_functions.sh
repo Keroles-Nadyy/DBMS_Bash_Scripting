@@ -20,3 +20,14 @@ database_validate(){
         return 1
     fi
 }
+
+
+list_databases(){
+    if [ -z "$(ls -A "$DB_Dir" )" ]
+    then
+        echo "No databases exist..."
+    else
+        echo -e "\tExisting databases :"
+        ls -p "$DB_Dir" | grep '/$' | sed 's/\/$//'
+    fi
+}
