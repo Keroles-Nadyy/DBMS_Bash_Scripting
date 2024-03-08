@@ -3,6 +3,9 @@
 export LC_COLLATE=C 
 shopt -s extglob
 
+# Import external scripts
+source ./create_DB.sh
+
 
 # Global variable
     # Colors
@@ -20,6 +23,7 @@ main_menu() {
         case $choise in
             "Create database")
                 echo create_database
+                create_database
                 ;;
             "List databases")
                 echo list_databases
@@ -55,7 +59,6 @@ then
     mkdir $DB_Dir
     echo -e "${GREEN_Highlight_Bold}Database directory created successfully...${RESET}"
 fi
-
 
 
 
