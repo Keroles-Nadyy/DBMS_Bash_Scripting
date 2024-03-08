@@ -5,6 +5,8 @@ shopt -s extglob
 
 # Import external scripts
 source ./create_DB.sh
+source ./utils_functtions.sh
+source ./drop_DB.sh
 
 
 # Global variable
@@ -35,7 +37,6 @@ main_menu() {
                 ;;
             "Connect to database")
                 echo connect_to_database
-                connect_database
                 ;;
             "Quit")
                 read -p $'\x1b[37;41;1mq or (quit): to exit || or any key to back  : \e[0m ' isExit
