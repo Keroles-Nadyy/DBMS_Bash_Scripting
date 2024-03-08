@@ -2,9 +2,15 @@
 database_validate(){
     db_name=$1
     
+    if [[ $db_name =~ [[:space:]] ]]
+    then   
+        echo -e "${RED_Highlight_bold}Database name cannot contain space.${RESET}"
+        return 1
+    fi
+
     if [ -z $db_name ]
     then
-        echo "${RED_Highlight_bold}Database name cannot be empty.${RESET}"
+        echo -e "${RED_Highlight_bold}Database name cannot be empty.${RESET}"
         return 1
     fi
 

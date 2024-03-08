@@ -31,9 +31,11 @@ main_menu() {
                 ;;
             "Drop database")
                 echo drop_database
+                drop_database
                 ;;
             "Connect to database")
                 echo connect_to_database
+                connect_database
                 ;;
             "Quit")
                 read -p $'\x1b[37;41;1mq or (quit): to exit || or any key to back  : \e[0m ' isExit
