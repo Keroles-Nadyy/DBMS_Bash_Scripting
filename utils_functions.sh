@@ -14,6 +14,12 @@ database_validate(){
         return 1
     fi
 
+    if [ ${#db_name} -lt 3 ]
+    then
+        echo -e "${RED_Highlight_bold}Database name must be at least 3 characters long.${RESET}"
+        return 1
+    fi
+
     if [[ ! $db_name =~ ^[a-zA-Z] ]]
     then
         echo -e "${RED_Highlight_bold}Database name must start with a letter.${RESET}"
