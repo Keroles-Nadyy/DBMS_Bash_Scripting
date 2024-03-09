@@ -104,7 +104,21 @@ list_databases(){
     then
         echo "No databases exist..."
     else
-        echo -e "\tExisting databases :"
+        echo -e "\t\tExisting databases :"
         ls -p "$DB_Dir" | grep '/$' | sed 's/\/$//'
     fi
+    echo "===================================================="
+
+}
+
+
+list_tables(){
+    current_db_name=$1
+    echo "===================================================="
+    echo -e "\tList of tables in database '$current_db_name':"
+    
+    # The -p option to add a / to directories.
+    # The -v option to invert the match
+    ls -p databases/iti/ | grep -v "metadata.txt$" | sed 's/\.txt$//'
+    echo "===================================================="
 }
