@@ -34,6 +34,70 @@ database_validate(){
     fi
 }
 
+datatype_validate(){
+    data=$1
+    constrint=$2
+    specified_string=$3
+    case $constrint in
+        "int")
+            if ! [[ $data =~ ^[0-9]+$ ]]
+            then
+                echo -e "${RED_Highlight_bold}Invalid number.${RESET}"
+                return 1
+            fi
+            ;;
+        "string")
+            case $specified_string in
+            "full_name")
+                if ! [[  "$data" =~ "^[a-zA-Z][a-zA-Z0-9_ ]+$" ]]
+                then
+                    echo -e "${RED_Highlight_bold}Invalid Full name, spaces only are allowed but not at the beginning.${RESET}"
+                    return 1
+                fi
+                ;;
+            "first_name")
+                if  [[ ! $data =~ ^[a-zA-Z]+$ ]]
+                then
+                    echo -e "${RED_Highlight_bold}Invalid name, letters only.${RESET}"
+                    return 1
+                fi
+                ;;
+            "user_name")
+                if  [[ ! $data =~ "^[a-zA-Z][a-zA-Z0-9_]+$" ]]
+                then
+                    echo -e "${RED_Highlight_bold}Not valid user_name, only letters, numbers, and underscores are valid.${RESET}"
+                    return 1
+                fi
+                ;;
+            "user_name")
+                if  [[ ! $data =~ "^[a-zA-Z][a-zA-Z0-9_]+$" ]]
+                then
+                    echo -e "${RED_Highlight_bold}Not valid user_name, only letters, numbers, and underscores are valid.${RESET}"
+                    return 1
+                fi
+                ;;
+            "email")
+                if  [[ ! $data =~ ^[a-zA-Z0-9][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]
+                then
+                    echo -e "${RED_Highlight_bold}Invalid email.${RESET}"
+                    return 1
+                fi
+                ;;
+            "phone_number")
+                if  [[ ! $data =~ ^[+][0-9]{8,}|[0-9]{8,}$ ]]
+                then
+                    echo -e "${RED_Highlight_bold}Invalid phone number.${RESET}"
+                    return 1
+                fi
+                ;;
+            *)
+                echo -e "${RED_Highlight_bold}Invalid datatype.${RESET}"
+                return 1
+                ;;
+            esac
+    esac
+}
+
 
 list_databases(){
     if [ -z "$(ls -A "$DB_Dir" )" ]
