@@ -1,20 +1,26 @@
 
 source ./utils_functions.sh
 
+# Function to drop database
 drop_database() {
+    clear
+    echo -e "${BLUE_BOLD}\t\t\t\t\t=================================================================${RESET}"
+    echo -e "${BLUE_BOLD}\t\t\t\t\t                         Drop Database                           ${RESET}"
+    echo -e "${BLUE_BOLD}\t\t\t\t\t=================================================================${RESET}"
+
+    list_databases_Present
+
     while true
     do
-        read -p "Enter database name to drop or [q] for exit : " db_name
-
+        read -p $'\x1b[31;1mEnter database name to drop or [q] for exit : \e[0m' db_name
         if [[ $db_name = [qQ] ]]
         then
-            echo "Exiting..."
+            echo -e "${RED_bold}Exiting...${RESET}"
             return
         fi
 
         if ! database_validate "$db_name"
         then
-            echo "Please try again."
             continue
         fi
 
@@ -24,24 +30,27 @@ drop_database() {
             continue
         fi
 
-        read -p "Do you want to drop ${db_name} [Y] for agree or [any key] for decline : " answer
+        read -p $'\x1b[31;1mDo you want to drop ${db_name} [Y] for agree or [any key] for decline : \e[0m' answer
         case $answer in
             [Yy])
                 rm -rf $DB_Dir/$db_name
-                echo "Database '$db_name' dropped."
-                read -p "Do you want to drop another database [Y] for agree or [any key] for decline : " delete_more
+                echo -e "${GREEN_Highlight_Bold}Database '$db_name' dropped successfully..${RESET}"
+
+                read -p $'\x1b[31;1mDo you want to drop another database [Y] for agree or [any key] for decline : \e[0m' delete_more
                 case $delete_more in
                     [Yy])
                         continue
                         ;;
                     *)
-                        echo -e "Exiting..."
+                        echo -e "${RED_bold}Exiting...${RESET}"
                         break
                 esac
                 ;;
             *)
-                echo -e "Exiting..."
+                echo -e "${RED_bold}Exiting...${RESET}"
                 break
         esac
     done
+    mainMenu
 }
+

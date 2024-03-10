@@ -5,41 +5,49 @@ shopt -s extglob
 
 # Import external scripts
 source ./create_DB.sh
-source ./utils_functtions.sh
+source ./utils_functions.sh
 source ./drop_DB.sh
 source ./connect_DB.sh
+
+export LC_COLLATE=C 
+shopt -s extglob
 
 
 # Global variable
     # Colors
 GREEN_Highlight_Bold='\x1b[37;42;1m'
 RED_Highlight_bold='\x1b[37;41;1m'
+RED_bold='\x1b[31;1m'
 YELLOW_Highlight_bold='\x1b[30;43;1m'
+YELLOW_bold='\x1b[33;1m'
 CYAN_bold='\x1b[36;1m'
+BLUE_BOLD='\x1b[34;1m'
+TEST='\033[34;1m'
 RESET='\033[0m'
 
 DB_Dir="./databases"
 
 
 main_menu() {
-    PS3="Choise: "
+    clear
+    echo -e "${BLUE_BOLD}\t\t\t\t\t==============================================================================${RESET}"
+    echo -e "${BLUE_BOLD}\t\t\t\t\t                         Welcome to Bash DBMS Project                         ${RESET}"
+    echo -e "${BLUE_BOLD}\t\t\t\t\t==============================================================================${RESET}"
+
+    PS3="$(echo -e "${BLUE_BOLD}Select Database Operation >> ${RESET}")"
     select choise in "Create database" "List databases" "Drop database" "Connect to database" "Quit" 
     do
         case $choise in
             "Create database")
-                echo create_database
                 create_database
                 ;;
             "List databases")
-                echo list_databases
                 list_databases
                 ;;
             "Drop database")
-                echo drop_database
                 drop_database
                 ;;
             "Connect to database")
-                echo connect_to_database
                 connect_database
                 ;;
             "Quit")
@@ -60,15 +68,13 @@ main_menu() {
 }
 
 
-echo -e "\t\tWelcome To our database :)"
-echo "============================================================="
+# echo -e "\t\tWelcome To our database :)"
+# echo "============================================================="
+
 if [ ! -d $DB_Dir ] 
 then
     mkdir $DB_Dir
     echo -e "${GREEN_Highlight_Bold}Database directory created successfully...${RESET}"
 fi
 
-
-
-# Start Point
 main_menu

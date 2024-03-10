@@ -103,6 +103,18 @@ list_databases(){
     echo "===================================================="
 }
 
+list_databases_Present(){
+    echo "===================================================="
+    if [ -z "$(ls -A "$DB_Dir" )" ]
+    then
+        echo -e "${RED_Highlight_bold}No databases exist...${RESET}"
+    else
+        echo -e "${CYAN_bold}\t\tExisting databases${RESET}"
+        ls -p "$DB_Dir" | grep '/$' | sed 's/\/$//'
+    fi
+    echo "===================================================="
+}
+
 
 list_tables(){
     current_db=$1
