@@ -1,7 +1,7 @@
 
 database_validate(){
-    db_object_name=${1:-$db_name}
-    db_object=${2:-Database}
+    db_object_name=$1
+    db_object=$2
     
     if [[ $db_object_name =~ [[:space:]] ]]
     then   

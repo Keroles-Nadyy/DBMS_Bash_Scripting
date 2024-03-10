@@ -29,7 +29,7 @@ create_database(){
             esac
         fi
 
-        if ! database_validate "$db_name"
+        if ! database_validate "$db_name" "Database"
         then
             continue
         fi

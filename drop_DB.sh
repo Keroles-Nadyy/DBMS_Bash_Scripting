@@ -19,7 +19,7 @@ drop_database() {
             return
         fi
 
-        if ! database_validate "$db_name"
+        if ! database_validate "$db_name" "Database"
         then
             continue
         fi

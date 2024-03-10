@@ -17,7 +17,7 @@ connect_database(){
     list_databases_Present
 
     read -p $'\x1b[33;1mEnter database name to connect: \e[0m' db_name
-    if ! database_validate "$db_name"
+    if ! database_validate "$db_name" "Database"
     then
         return 1
     fi
