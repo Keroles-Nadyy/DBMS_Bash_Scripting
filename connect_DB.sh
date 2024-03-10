@@ -1,5 +1,7 @@
 
 source ./utils_functions.sh
+source ./create_TB.sh
+source ./drop_TB.sh
 
 connect_database() {
     read -p "Enter database name to connect: " db_name
@@ -17,12 +19,15 @@ connect_database() {
             case $operation in
                 "Create table")
                     echo create_table
+                    create_table "$db_name"
                     ;;
                 "List tables")
                     echo list_tables
+                    list_tables "$db_name"
                     ;;
                 "Drop table")
                     echo drop_table
+                    drop_table "$db_name"
                     ;;
                 "Back to main menu")
                     break
