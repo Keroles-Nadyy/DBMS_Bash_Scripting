@@ -14,6 +14,8 @@ source ./connect_DB.sh
     # Colors
 GREEN_Highlight_Bold='\x1b[37;42;1m'
 RED_Highlight_bold='\x1b[37;41;1m'
+YELLOW_Highlight_bold='\x1b[30;43;1m'
+CYAN_bold='\x1b[36;1m'
 RESET='\033[0m'
 
 DB_Dir="./databases"
@@ -68,5 +70,5 @@ fi
 
 
 
-# Start the DBMS
+# Start Point
 main_menu

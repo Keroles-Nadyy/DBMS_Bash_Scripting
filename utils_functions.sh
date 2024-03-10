@@ -69,13 +69,6 @@ datatype_validate(){
                     return 1
                 fi
                 ;;
-            "user_name")
-                if  [[ ! $data =~ "^[a-zA-Z][a-zA-Z0-9_]+$" ]]
-                then
-                    echo -e "${RED_Highlight_bold}Not valid user_name, only letters, numbers, and underscores are valid.${RESET}"
-                    return 1
-                fi
-                ;;
             "email")
                 if  [[ ! $data =~ ^[a-zA-Z0-9][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]
                 then
@@ -98,17 +91,16 @@ datatype_validate(){
     esac
 }
 
-
 list_databases(){
+    echo "===================================================="
     if [ -z "$(ls -A "$DB_Dir" )" ]
     then
         echo "No databases exist..."
     else
-        echo -e "\t\tExisting databases :"
+        echo -e "\tExisting databases :"
         ls -p "$DB_Dir" | grep '/$' | sed 's/\/$//'
     fi
     echo "===================================================="
-
 }
 
 
