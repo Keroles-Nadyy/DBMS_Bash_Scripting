@@ -113,12 +113,17 @@ list_databases(){
 
 
 list_tables(){
-    current_db_name=$1
+    current_db=$1
     echo "===================================================="
-    echo -e "\tList of tables in database '$current_db_name':"
-    
-    # The -p option to add a / to directories.
-    # The -v option to invert the match
-    ls -p databases/iti/ | grep -v "metadata.txt$" | sed 's/\.txt$//'
+    if [ -z "$(ls -A "$DB_Dir/$current_db" )" ]
+    then
+        echo "No tables exist..."
+        return 1
+    else
+        echo -e "\tExisting tables in database '$current_db': "
+        # The -p option to add a / to directories.
+        # The -v option to invert the match
+        ls -p "$DB_Dir/$current_db" | grep -v "metadata.txt$" | sed 's/\.txt$//'
+    fi
     echo "===================================================="
 }
