@@ -131,3 +131,12 @@ list_tables(){
     fi
     echo "===================================================="
 }
+
+mainMenu() {
+    echo -e "${CYAN_bold}\t\t------------ Main Menu --------------${RESET}"
+    echo "1) Create database "
+    echo "2) List databases "
+    echo "3) Drop database "
+    echo "4) Connect to database" 
+    echo "5) Quit"
+}
