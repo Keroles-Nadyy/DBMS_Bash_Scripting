@@ -40,6 +40,7 @@ datatype_validate(){
     specified_string=$3
     case $constrint in
         "int")
+            # if ! [[ $data =~ ^[+-]?[0-9]*\.?[0-9]+$ ]]
             if ! [[ $data =~ ^[0-9]+$ ]]
             then
                 echo -e "${RED_Highlight_bold}Invalid number.${RESET}"
@@ -118,6 +119,12 @@ list_databases_Present(){
 
 list_tables(){
     current_db=$1
+    list_tables_Present "$current_db"
+    tableMenu
+}
+
+list_tables_Present(){
+    current_db=$1
     echo "===================================================="
     if [ -z "$(ls -A "$DB_Dir/$current_db" )" ]
     then
@@ -132,6 +139,7 @@ list_tables(){
     echo "===================================================="
 }
 
+
 mainMenu() {
     echo -e "${CYAN_bold}\t\t------------ Main Menu --------------${RESET}"
     echo "1) Create database "
@@ -139,4 +147,38 @@ mainMenu() {
     echo "3) Drop database "
     echo "4) Connect to database" 
     echo "5) Quit"
+}
+
+
+tableMenu() {
+    echo -e "${CYAN_bold}\t\t------------ Table Menu --------------${RESET}"
+    echo "1) Create table"
+    echo "2) List tables "
+    echo "3) Drop table "
+    echo "4) Insert into table" 
+    echo "5) Select from table"
+    echo "6) Update table"
+    echo "7) Delete from table"
+    echo "8) Back to main menu"
+}
+
+
+draw_customized_table() {
+    metadata_file="$1"
+    data_file="$2"
+    db_name=$3
+    tb_name=$4
+    echo " "
+    echo -e "${GREEN_bold}==============================================================================${RESET}"
+    echo -e "${GREEN_bold}          All matched records in ${tb_name} table in ${db_name} DB            ${RESET}"
+    echo -e "${GREEN_bold}==============================================================================${RESET}"
+    header_names=$(awk 'BEGIN { FS="[,\n]"; OFS="," } { printf "%s%s", $1, (NR%3 ? "," : "\n") }' "${metadata_file}")
+    if [ ! -s "$data_file" ]
+    then
+        echo " " | sed "1i $header_names" | column -s, -t
+    else
+        cat $data_file | sed "1i $header_names" | column -s, -t
+    fi
+    echo -e "${GREEN_bold}==============================================================================${RESET}"
+    echo " "
 }

@@ -3,6 +3,7 @@ source ./utils_functions.sh
 
 select_from_table() {
     db_name=$1
+    list_tables_Present "$db_name"
 
     read -p "Enter table name to select from: " tb_name
     if ! database_validate "$tb_name" "Table"
@@ -23,8 +24,7 @@ select_from_table() {
     read -p "Do you want to display the whole table? [ Y | N ]: " confirm_all
     case $confirm_all in
         [Yy])
-            echo "All records in table '$tb_name':"
-            cat "$db_file"
+            draw_customized_table "$metadata_file" "$db_file" "$db_name" "$tb_name"
             ;;
         [Nn])
             read -p "Do you want to display based on primary key? [ Y | N ]: " confirm_pk
@@ -34,8 +34,10 @@ select_from_table() {
                     IFS=',' read -ra pk_array <<< "$pk_values"
                     for pk_value in "${pk_array[@]}"
                     do
-                        grep "$pk_value" "$db_file"
+                        grep "$pk_value" "$db_file" >> temp
                     done
+                        draw_customized_table "$metadata_file" ./temp "$db_name" "$tb_name"
+                        rm temp
                     ;;
                 [Nn])
                     field_datatypes=$(awk 'BEGIN { FS="[,\n]"; OFS="," } { printf "%s:%s:%s%s ", $1, $2, $3, (NR%3 ? "," : "\n") }' "${metadata_file}")
@@ -49,7 +51,7 @@ select_from_table() {
                     then
                         echo -e "${RED_Highlight_bold}${tb_name} No valid Input. ${RESET}"
                         echo -e "${YELLOW_Highlight_bold}\tThe whole table will be displayed. ${RESET}"
-                        cat "$db_file"
+                        draw_customized_table "$metadata_file" "$db_file" "$db_name" "$tb_name"
                     else                       
                         # Read metadata to get field names and primary key
                         fields=($(awk -F ',' '{print $1}' "$metadata_file"))
@@ -117,8 +119,10 @@ select_from_table() {
                             echo -e "${RED_Highlight_bold}No match...${RESET}"
                             return 1
                         else
-                            echo -e "\tSelected records:"
-                            echo "${selected_records[@]}"
+                            # echo -e "\tSelected records:"
+                            echo "${selected_records[@]}" > temp
+                            draw_customized_table "$metadata_file" ./temp "$db_name" "$tb_name"
+                            rm temp
                         fi
                         echo "===================================================="
                     fi

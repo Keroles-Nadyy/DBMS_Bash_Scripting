@@ -2,20 +2,31 @@ source ./utils_functions.sh
 
 create_table(){
     db_name=$1
-    read -p "Enter table name: " tb_name
+    list_tables_Present "$db_name"
 
-    # validate table name using database_validate function in utils_functions.sh
-    if ! database_validate "$tb_name" "Table"
-    then
-        return 1
-    fi
+    while true
+    do
+        read -p "Enter table name : ( or q for exit ) " tb_name
+        if [[ $tb_name = [qQ] ]]
+        then
+            echo -e "${RED_bold}Create operation cancelled. Exiting...${RESET}"
+            tableMenu
+            return
+        fi
+        # validate table name using database_validate function in utils_functions.sh
+        if ! database_validate "$tb_name" "Table"
+        then
+            continue
+        fi
 
-    # Check if the table is already exist or not.
-    if [ -f "$DB_Dir/$db_name/$tb_name.txt" ]
-    then
-        echo -e "${RED_Highlight_bold}Table '$tb_name' already exists.${RESET}"
-        return 1
-    fi
+        # Check if the table is already exist or not.
+        if [ -f "$DB_Dir/$db_name/$tb_name.txt" ]
+        then
+            echo -e "${RED_Highlight_bold}Table '$tb_name' already exists.${RESET}"
+            continue
+        fi
+        break
+    done
     
     # In case the table name is valid and it's not exist, create 2 files, table_name.txt, table_name-metadata.txt 
     tb_file=$DB_Dir/$db_name/$tb_name.txt
@@ -27,18 +38,35 @@ create_table(){
 
     
     # Ask for number of fields in the table that must be more than 1 field
-    read -p "Enter the number of fields: " tb_num_fields
-    until [[ $tb_num_fields =~ ^[2-9]+$ ]]
+    while true
     do
-        echo -e "${RED_Highlight_bold}Number must be at least 2 fields.${RESET}"
-        read -p "Enter the number of fields: " tb_num_fields
+        read -p "Enter the number of fields:  ( or q for exit ) " tb_num_fields
+        if [[ $tb_num_fields = [qQ] ]]
+        then
+            echo -e "${RED_bold}Exiting...${RESET}"
+            tableMenu
+            return
+        else
+            until [[ $tb_num_fields =~ ^[2-9]+$ ]]
+            do
+                echo -e "${RED_Highlight_bold}Number must be at least 2 fields.${RESET}"
+                read -p "Enter the number of fields: " tb_num_fields
+            done
+        fi
+        break
     done
-    
 
     # Start looping over these fields 
-    for i in $(seq $tb_num_fields)
+    # for i in $(seq $tb_num_fields)
+    for ((i = 0 ; i < $tb_num_fields ; i++))
     do
-        read -p "Enter name for field $i: " field_name
+        read -p "Enter name for field $(($i+1)):  ( or q for exit )  " field_name
+        if [[ $field_name = [qQ] ]]
+        then
+            echo -e "${RED_bold}Exiting...${RESET}"
+            tableMenu
+            return
+        fi
         if ! database_validate "$field_name" "Field"
         then
             ((i--))
@@ -47,7 +75,13 @@ create_table(){
             # specify the datatype
             while true
             do
-                read -p "Enter data type for $field_name [ string | int ]: " data_type
+                read -p "Enter data type for $field_name [ string | int ] : ( or q for exit ) " data_type
+                if [[ $data_type = [qQ] ]]
+                then
+                    echo -e "${RED_bold}Exiting...${RESET}"
+                    tableMenu
+                    return
+                fi
                 case $data_type in
                     [sS][tT][rR][iI][nN][gG])
                         data_type="String"
@@ -59,6 +93,7 @@ create_table(){
                         ;;
                     *)
                         echo -e "${RED_Highlight_bold}Invalid datatype. Please enter [ string | int ].${RESET}"
+                        continue
                         ;;
                 esac
             done
@@ -82,6 +117,7 @@ create_table(){
                             ;;
                         *)
                             echo -e "${RED_Highlight_bold}IInvalid input. Please enter [ Y | N ].${RESET}"
+                            continue
                             ;;
                     esac
                 done
@@ -106,6 +142,7 @@ create_table(){
                             ;;
                         *)
                             echo -e "${RED_Highlight_bold}IInvalid input. Please enter [ Y | N ].${RESET}"
+                            continue
                             ;;
                     esac
                 done
@@ -132,8 +169,9 @@ create_table(){
         echo -e "${YELLOW_Highlight_bold}No primary key selected. Please choose one.${RESET}"
         for field in "${fields_names[@]}"
         do
-            echo "Field: $field"
+            echo -n "$field "
         done
+        echo " "
 
         if [[ ${#notNull_fields_names} -gt 0 ]]
         then
@@ -161,23 +199,27 @@ create_table(){
                     echo "${primary_key_field}"
                     read -p "Do you want ${primary_key_field} to be NOT NULL? [ Y | N ]: " nullable_modify
                     case $nullable_modify in
-                        [Yy]*)
+                        [Yy])
                             awk -v key="${primary_key_field}" -v new_value1="NOT NULL" -v new_value2="PRIMARY KEY" 'BEGIN{FS=","; OFS=","} { if($1 == key) {$3=new_value1; $4=new_value2}}1' "$tb_meta_file" > temp && mv temp "$tb_meta_file"
                             notNull_fields_names+=("$primary_key_field")
                             break
                             ;;
-                        [Nn]*)
+                        [Nn])
                             echo -e "${YELLOW_Highlight_bold}Please choose one from the list above.${RESET}"
-                            break
+                            continue
                             ;;
                         *)
                             echo -e "${RED_Highlight_bold}IInvalid input. Please enter [ Y | N ].${RESET}"
+                            continue
                             ;;
                     esac
                 fi
             else
-                echo "Invalid field name. Please choose one from the list above."
+                echo -e "${RED_Highlight_bold}Invalid field name. Please choose one from the list above..${RESET}"
+                continue
             fi
         done
     fi
+    echo -e "${GREEN_Highlight_Bold}Table '$tb_name' created successfully.${RESET}"
+    tableMenu
 }

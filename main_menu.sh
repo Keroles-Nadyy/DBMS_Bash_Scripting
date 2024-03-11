@@ -16,6 +16,7 @@ shopt -s extglob
 # Global variable
     # Colors
 GREEN_Highlight_Bold='\x1b[37;42;1m'
+GREEN_bold='\x1b[32;1m'
 RED_Highlight_bold='\x1b[37;41;1m'
 RED_bold='\x1b[31;1m'
 YELLOW_Highlight_bold='\x1b[30;43;1m'

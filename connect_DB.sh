@@ -5,7 +5,7 @@ source ./drop_TB.sh
 source ./insert_TB.sh
 source ./select_TB.sh
 source ./update_TB.sh
-source ./delete_From_TB.sh
+source ./delete_from_TB.sh
 
 
 connect_database(){
@@ -15,7 +15,6 @@ connect_database(){
     echo -e "${BLUE_BOLD}\t\t\t\t\t=====================================================================${RESET}"
     
     list_databases_Present
-
     read -p $'\x1b[33;1mEnter database name to connect: \e[0m' db_name
     if ! database_validate "$db_name" "Database"
     then
@@ -50,6 +49,8 @@ connect_database(){
                     delete_from_table "$db_name"
                     ;;
                 "Back to main menu")
+                    mainMenu
+                    PS3="$(echo -e "${BLUE_BOLD}Select Database Operation >> ${RESET}")"
                     break
                     ;;
                 *)
@@ -61,3 +62,5 @@ connect_database(){
         echo -e "${RED_Highlight_bold}Database '$db_name' does not exist.${RESET}"
     fi
 }
+
+mainMenu

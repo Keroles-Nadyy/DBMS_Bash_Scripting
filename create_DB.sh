@@ -6,6 +6,9 @@ create_database(){
     echo -e "${BLUE_BOLD}\t\t\t\t\t=================================================================${RESET}"
     echo -e "${BLUE_BOLD}\t\t\t\t\t                         Create Database                         ${RESET}"
     echo -e "${BLUE_BOLD}\t\t\t\t\t=================================================================${RESET}"
+    
+    list_databases_Present
+    
     while true
     do
         read -p $'\x1b[36;1mEnter database name: ( or q for exit ) : \e[0m' db_name

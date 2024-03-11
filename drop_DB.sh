@@ -15,7 +15,7 @@ drop_database() {
         read -p $'\x1b[31;1mEnter database name to drop or [q] for exit : \e[0m' db_name
         if [[ $db_name = [qQ] ]]
         then
-            echo -e "${RED_bold}Exiting...${RESET}"
+            echo -e "${RED_bold}Drop operation cancelled. Exiting...${RESET}"
             return
         fi
 
@@ -47,7 +47,7 @@ drop_database() {
                 esac
                 ;;
             *)
-                echo -e "${RED_bold}Exiting...${RESET}"
+                echo -e "${RED_bold}Drop operation cancelled. Exiting...${RESET}"
                 break
         esac
     done
