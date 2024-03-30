@@ -7,7 +7,7 @@ update_table(){
 
     while true
     do
-        read -p "Enter table name to update into: ( or q for exit ) " tb_name
+        read -r -p "Enter table name to update into: ( or q for exit ) " tb_name
         if [[ $tb_name = [qQ] ]]
         then
             echo -e "${RED_bold}Update operation cancelled. Exiting...${RESET}"
@@ -40,7 +40,7 @@ update_table(){
     while true
     do
         # Read field to update
-        read -p "Enter PK for row to update: ( or q for exit ) " PK_field_value
+        read -r -p "Enter PK for row to update: ( or q for exit ) " PK_field_value
         if [[ $PK_field_value = [qQ] ]]
         then
             echo -e "${RED_bold}Update operation cancelled. Exiting...${RESET}"
@@ -64,7 +64,7 @@ update_table(){
     while true
     do
         # Read field to update
-        read -p "Enter field to update: ( or q for exit ) " field_name
+        read -r -p "Enter field to update: ( or q for exit ) " field_name
         if [[ $field_name = [qQ] ]]
         then
             echo -e "${RED_bold}Update operation cancelled. Exiting...${RESET}"
@@ -94,7 +94,7 @@ update_table(){
     done
     while true
     do
-        read -p "Enter new value for '$field_name' : ( or q for exit ) " new_value
+        read -r -p "Enter new value for '$field_name' : ( or q for exit ) " new_value
         if [[ $new_value = [qQ] ]]
         then
             echo -e "${RED_bold}Update operation cancelled. Exiting...${RESET}"

@@ -1,6 +1,8 @@
 #! /usr/bin/bash
 
+# to enforce terminal to be case-sensitive
 export LC_COLLATE=C 
+# to enable sub patterns and allow to use regex in comparison
 shopt -s extglob
 
 # Import external scripts
@@ -8,10 +10,6 @@ source ./create_DB.sh
 source ./utils_functions.sh
 source ./drop_DB.sh
 source ./connect_DB.sh
-
-export LC_COLLATE=C 
-shopt -s extglob
-
 
 # Global variable
     # Colors
@@ -52,13 +50,14 @@ main_menu() {
                 connect_database
                 ;;
             "Quit")
-                read -p $'\x1b[37;41;1mq or (quit): to exit || or any key to back  : \e[0m ' isExit
+                read -r -p $'\x1b[37;41;1mq or (quit): to exit || or any key to back  : \e[0m ' isExit
                 if [[ $isExit = q || $isExit = quit ]]
                 then
                     echo "Exiting..."
                     break
                 else
                     echo -e "${GREEN_Highlight_Bold}Back again to our DBMS....${RESET}"
+                    mainMenu
                 fi
                 ;;
             *)

@@ -4,9 +4,13 @@ create_table(){
     db_name=$1
     list_tables_Present "$db_name"
 
+    # reset Variables
+    notNull_fields_names=()
+    fields_names=()
+    
     while true
     do
-        read -p "Enter table name : ( or q for exit ) " tb_name
+        read -r -p "Enter table name : ( or q for exit ): " tb_name
         if [[ $tb_name = [qQ] ]]
         then
             echo -e "${RED_bold}Create operation cancelled. Exiting...${RESET}"
@@ -40,17 +44,20 @@ create_table(){
     # Ask for number of fields in the table that must be more than 1 field
     while true
     do
-        read -p "Enter the number of fields:  ( or q for exit ) " tb_num_fields
+        read -r -p "Enter the number of fields: ( or q for exit ) " tb_num_fields
         if [[ $tb_num_fields = [qQ] ]]
         then
             echo -e "${RED_bold}Exiting...${RESET}"
+            # Drop table
+            rm -f "$tb_file"
+            rm -f "$tb_meta_file"
             tableMenu
             return
         else
             until [[ $tb_num_fields =~ ^[2-9]+$ ]]
             do
                 echo -e "${RED_Highlight_bold}Number must be at least 2 fields.${RESET}"
-                read -p "Enter the number of fields: " tb_num_fields
+                read -r -p "Enter the number of fields: " tb_num_fields
             done
         fi
         break
@@ -60,10 +67,13 @@ create_table(){
     # for i in $(seq $tb_num_fields)
     for ((i = 0 ; i < $tb_num_fields ; i++))
     do
-        read -p "Enter name for field $(($i+1)):  ( or q for exit )  " field_name
+        read -r -p "Enter name for field $(($i+1)):  ( or q for exit )  " field_name
         if [[ $field_name = [qQ] ]]
         then
             echo -e "${RED_bold}Exiting...${RESET}"
+            # Drop table
+            rm -f "$tb_file"
+            rm -f "$tb_meta_file"
             tableMenu
             return
         fi
@@ -75,10 +85,13 @@ create_table(){
             # specify the datatype
             while true
             do
-                read -p "Enter data type for $field_name [ string | int ] : ( or q for exit ) " data_type
+                read -r -p "Enter data type for $field_name [ string | int ] : ( or q for exit ) " data_type
                 if [[ $data_type = [qQ] ]]
                 then
                     echo -e "${RED_bold}Exiting...${RESET}"
+                    # Drop table
+                    rm -f "$tb_file"
+                    rm -f "$tb_meta_file"
                     tableMenu
                     return
                 fi
@@ -103,15 +116,15 @@ create_table(){
             then
                 while true
                 do
-                    read -p "Is $field_name a primary key? [ Y | N ] : " is_primary
+                    read -r -p "Is $field_name a primary key? [ Y | N ] : " is_primary
                     case $is_primary in
-                        [Yy]*)
+                        [Yy])
                             primary_key="PRIMARY KEY"
                             echo -e "${GREEN_Highlight_Bold}Primary key selected: ${field_name}.${RESET}"
                             pk_field=$field_name
                             break
                             ;;
-                        [Nn]*)
+                        [Nn])
                             primary_key=""
                             break
                             ;;
@@ -128,13 +141,13 @@ create_table(){
             then
                 while true
                 do
-                    read -p "Is $field_name nullable? [ Y | N ]: " is_nullable
+                    read -r -p "Is $field_name nullable? [ Y | N ]: " is_nullable
                     case $is_nullable in
-                        [Yy]*)
+                        [Yy])
                             nullable="NULL"
                             break
                             ;;
-                        [Nn]*)
+                        [Nn])
                             nullable="NOT NULL"
                             # Store fields names that are not null into array
                             notNull_fields_names+=("$field_name")
@@ -185,19 +198,19 @@ create_table(){
         
         while true
         do
-            read -p "Enter name of field to set as primary key: " primary_key_field
+            read -r -p "Enter name of field to set as primary key: " primary_key_field
             if [[ " ${fields_names[@]} " =~ " ${primary_key_field} " ]]
             then
-                if [[ " ${notNull_fields_names[@]} " =~ " ${primary_key_field} " ]]
+                if [[ "${notNull_fields_names[@]}" =~ "${primary_key_field}" ]]
                 then
                     echo "${primary_key_field}"
                     
                     # The 1 at the end of the awk command, to print the current record (line).
-                    awk -v key="${primary_key_field}" -v new_value="PRIMARY KEY" 'BEGIN{FS=","; OFS=","} $1 == key {$4=new_value}1' "$tb_meta_file" > temp && mv temp "$tb_meta_file"
+                    awk -v key="${primary_key_field}" -v new_value="PRIMARY KEY" 'BEGIN{FS=","; OFS=","} { if($1 == key) {$4=new_value}}1' "$tb_meta_file" > temp && mv temp "$tb_meta_file"
                     break
                 else
                     echo "${primary_key_field}"
-                    read -p "Do you want ${primary_key_field} to be NOT NULL? [ Y | N ]: " nullable_modify
+                    read -r -p "Do you want ${primary_key_field} to be NOT NULL? [ Y | N ]: " nullable_modify
                     case $nullable_modify in
                         [Yy])
                             awk -v key="${primary_key_field}" -v new_value1="NOT NULL" -v new_value2="PRIMARY KEY" 'BEGIN{FS=","; OFS=","} { if($1 == key) {$3=new_value1; $4=new_value2}}1' "$tb_meta_file" > temp && mv temp "$tb_meta_file"

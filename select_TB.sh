@@ -5,7 +5,7 @@ select_from_table() {
     db_name=$1
     list_tables_Present "$db_name"
 
-    read -p "Enter table name to select from: " tb_name
+    read -r -p "Enter table name to select from: " tb_name
     if ! database_validate "$tb_name" "Table"
     then
         return 1
@@ -21,16 +21,16 @@ select_from_table() {
         return 1
     fi
 
-    read -p "Do you want to display the whole table? [ Y | N ]: " confirm_all
+    read -r -p "Do you want to display the whole table? [ Y | N ]: " confirm_all
     case $confirm_all in
         [Yy])
             draw_customized_table "$metadata_file" "$db_file" "$db_name" "$tb_name"
             ;;
         [Nn])
-            read -p "Do you want to display based on primary key? [ Y | N ]: " confirm_pk
+            read -r -p "Do you want to display based on primary key? [ Y | N ]: " confirm_pk
             case $confirm_pk in
                 [Yy])
-                    read -p "Enter primary key(s) value(s) (separated by commas if multiple): " pk_values
+                    read -r -p "Enter primary key(s) value(s) (separated by commas if multiple): " pk_values
                     IFS=',' read -ra pk_array <<< "$pk_values"
                     for pk_value in "${pk_array[@]}"
                     do
@@ -43,7 +43,7 @@ select_from_table() {
                     field_datatypes=$(awk 'BEGIN { FS="[,\n]"; OFS="," } { printf "%s:%s:%s%s ", $1, $2, $3, (NR%3 ? "," : "\n") }' "${metadata_file}")
                     echo "Fields (field:datatype) in table  '$tb_name': $field_datatypes"
                     
-                    read -p "Enter conditions (field=value pairs separated by commas if multiple): " conditions
+                    read -r -p "Enter conditions (field=value pairs separated by commas if multiple): " conditions
                     IFS=',' read -ra condition_array <<< "$conditions"
 
                     # Display records based on conditions

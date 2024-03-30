@@ -12,10 +12,11 @@ drop_database() {
 
     while true
     do
-        read -p $'\x1b[31;1mEnter database name to drop or [q] for exit : \e[0m' db_name
+        read -r -p $'\x1b[31;1mEnter database name to drop or [q] for exit : \e[0m' db_name
         if [[ $db_name = [qQ] ]]
         then
             echo -e "${RED_bold}Drop operation cancelled. Exiting...${RESET}"
+            mainMenu
             return
         fi
 
@@ -30,15 +31,16 @@ drop_database() {
             continue
         fi
 
-        read -p $'\x1b[31;1mDo you want to drop ${db_name} [Y] for agree or [any key] for decline : \e[0m' answer
+        read -r -p $'\x1b[31;1mDo you want to drop \e[0m'"${db_name} "$'\x1b[31;1m[Y] for agree or [any key] for decline : \e[0m' answer
         case $answer in
             [Yy])
                 rm -rf $DB_Dir/$db_name
                 echo -e "${GREEN_Highlight_Bold}Database '$db_name' dropped successfully..${RESET}"
 
-                read -p $'\x1b[31;1mDo you want to drop another database [Y] for agree or [any key] for decline : \e[0m' delete_more
+                read -r -p $'\x1b[31;1mDo you want to drop another database [Y] for agree or [any key] for decline : \e[0m' delete_more
                 case $delete_more in
                     [Yy])
+                        list_databases_Present
                         continue
                         ;;
                     *)

@@ -9,7 +9,7 @@ database_validate(){
         return 1
     fi
 
-    if [ -z $db_object_name ]
+    if [ -z "$db_object_name" ]
     then
         echo -e "${RED_Highlight_bold}${db_object} name cannot be empty.${RESET}"
         return 1
@@ -93,15 +93,8 @@ datatype_validate(){
 }
 
 list_databases(){
-    echo "===================================================="
-    if [ -z "$(ls -A "$DB_Dir" )" ]
-    then
-        echo "No databases exist..."
-    else
-        echo -e "\tExisting databases :"
-        ls -p "$DB_Dir" | grep '/$' | sed 's/\/$//'
-    fi
-    echo "===================================================="
+    list_databases_Present
+    mainMenu
 }
 
 list_databases_Present(){

@@ -7,7 +7,7 @@ delete_from_table(){
 
     while true
     do
-        read -p "Enter table name to delete upon : ( or q for exit ) " tb_name
+        read -r -p "Enter table name to delete upon : ( or q for exit ) " tb_name
         if [[ $tb_name = [qQ] ]]
         then
             echo -e "${RED_bold}Delete operation cancelled. Exiting...${RESET}"
@@ -45,7 +45,7 @@ delete_from_table(){
 
     while true
     do
-        read -p "Enter field name to delete upon : ( or q for exit ) " delete_field
+        read -r -p "Enter field name to delete upon : ( or q for exit ) " delete_field
         if [[ $delete_field = [qQ] ]]
         then
             echo -e "${RED_bold}Delete operation cancelled. Exiting...${RESET}"
@@ -73,7 +73,7 @@ delete_from_table(){
 
     while true
     do
-        read -p "Enter value to delete : ( or q for exit ) " delete_value
+        read -r -p "Enter value to delete : ( or q for exit ) " delete_value
         if [[ $delete_value = [qQ] ]]
         then
             echo -e "${RED_bold}Delete operation cancelled. Exiting...${RESET}"

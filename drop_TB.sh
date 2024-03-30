@@ -5,12 +5,13 @@ drop_table(){
     if ! list_tables_Present "$current_db"
     then
         echo -e "${RED_Highlight_bold}No tables to be dropped.${RESET}"
+        tableMenu
         return 1
     fi
 
     while true
     do
-        read -p "Enter table name to drop : ( or q for exit ) " tb_name
+        read -r -p "Enter table name to drop : ( or q for exit ) " tb_name
         if [[ $tb_name = [qQ] ]]
         then
             echo -e "${RED_bold}Drop operation cancelled. Exiting...${RESET}"
@@ -35,7 +36,7 @@ drop_table(){
 
     while true
     do
-        read -p "Are you sure you want to drop table '$tb_name' from database '$current_db'? [ Y | N ]: " confirm
+        read -r -p "Are you sure you want to drop table '$tb_name' from database '$current_db'? [ Y | N ]: " confirm
         case $confirm in
             [Yy])
                 rm "$db_file"
